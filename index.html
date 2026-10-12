@@ -9,6 +9,7 @@
   <title>มาง้ออะ 💨</title>
 
   <style>
+    /* ===== ตั้งค่าหน้าเว็บ ===== */
     * {
       box-sizing: border-box;
     }
@@ -26,9 +27,11 @@
       overflow-x: hidden;
     }
 
+    /* ===== ขยับเนื้อหาทั้งหมดขึ้น 100px ===== */
     .wrap {
       width: min(95vw, 460px);
       padding: 16px;
+      transform: translateY(-100px);
     }
 
     h1 {
@@ -106,10 +109,11 @@
       box-shadow: 0 12px 35px #d6598b55;
     }
 
-    /* ===== ปรับสำหรับมือถือ ===== */
+    /* ===== สำหรับมือถือ ===== */
     @media (max-width: 480px) {
       .wrap {
         padding: 12px;
+        transform: translateY(-55px);
       }
 
       .dog {
@@ -126,8 +130,12 @@
       }
     }
 
-    /* ===== ปรับสำหรับจอเตี้ย ===== */
+    /* ===== สำหรับหน้าจอเตี้ย ===== */
     @media (max-height: 600px) {
+      .wrap {
+        transform: translateY(-20px);
+      }
+
       .dog {
         font-size: 42px;
       }
@@ -201,6 +209,7 @@
 
 
   <script>
+    // ===== ตัวแปร =====
     let count = 0;
     let last = 0;
 
@@ -209,6 +218,7 @@
     const stage = document.querySelector("#stage");
     const msg = document.querySelector("#message");
 
+    // ===== ข้อความเมื่อพยายามกดโกด =====
     const lines = [
       "งื้ออ อย่าโกดเลย 🥺",
       "จับไม่ได้หรอก แบร่ 😝",
@@ -217,7 +227,7 @@
       "กดฉันให้ได้สิ 💨"
     ];
 
-    // ===== ปุ่มโกดหนี =====
+    // ===== ฟังก์ชันปุ่มโกดหนี =====
     function flee(e) {
 
       if (e?.cancelable) {
@@ -240,7 +250,7 @@
         (15 * scale) + "px " +
         (23 * scale) + "px";
 
-      // สุ่มตำแหน่งภายในพื้นที่ปุ่ม
+      // สุ่มตำแหน่งปุ่มโกด
       const maxX = stage.clientWidth - no.offsetWidth;
       const maxY = stage.clientHeight - no.offsetHeight;
 
@@ -260,21 +270,25 @@
       msg.textContent = lines[(count - 1) % lines.length];
     }
 
-    // เมาส์เข้าใกล้ปุ่มโกด
+    // ===== เมาส์เข้าใกล้ปุ่มโกด =====
     no.addEventListener("pointerenter", e => {
       if (e.pointerType === "mouse") {
         flee(e);
       }
     });
 
-    // แตะบนมือถือ
+    // ===== แตะปุ่มโกดบนมือถือ =====
     no.addEventListener("pointerdown", flee);
+
     no.addEventListener("click", flee);
 
-    // กดหายโกด
+    // ===== กดหายโกดแล้วเปลี่ยนหน้า =====
     yes.addEventListener("click", () => {
+
       document.querySelector("#question").style.display = "none";
+
       document.querySelector("#success").style.display = "block";
+
     });
 
   </script>
