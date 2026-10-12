@@ -9,7 +9,6 @@
   <title>มาง้ออะ 💨</title>
 
   <style>
-    /* ===== ตั้งค่าหน้าเว็บ ===== */
     * {
       box-sizing: border-box;
     }
@@ -20,30 +19,38 @@
       background: linear-gradient(140deg, #fff1f6, #ffd6e7);
       font-family: system-ui, sans-serif;
       color: #a63e66;
-      display: grid;
-      place-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .wrap {
       width: min(95vw, 460px);
-      padding: 24px;
+      padding: 16px;
     }
 
     h1 {
       font-size: clamp(29px, 7vw, 40px);
+      margin: 12px 0;
     }
 
     p {
       font-size: 17px;
+      margin: 12px 0;
+    }
+
+    .dog {
+      font-size: 60px;
+      line-height: 1.2;
     }
 
     /* ===== พื้นที่ปุ่ม ===== */
     .stage {
-      height: 300px;
+      height: 175px;
       position: relative;
-      margin: 15px auto;
+      margin: 12px auto 0;
     }
 
     button {
@@ -54,12 +61,13 @@
       font-weight: 700;
       cursor: pointer;
       touch-action: manipulation;
+      white-space: nowrap;
     }
 
-    /* ===== ปุ่มหายงอน ===== */
+    /* ===== ปุ่มหายโกด ===== */
     #yes {
       position: absolute;
-      top: 25px;
+      top: 15px;
       left: 7%;
       background: #f74e8d;
       color: white;
@@ -71,12 +79,17 @@
     /* ===== ปุ่มโกด ===== */
     #no {
       position: absolute;
-      top: 25px;
+      top: 15px;
       right: 7%;
       background: white;
       color: #c84c7a;
       z-index: 3;
       transition: left 0.12s, top 0.12s;
+    }
+
+    #message {
+      margin-top: 0;
+      font-size: 16px;
     }
 
     /* ===== หน้าคืนดี ===== */
@@ -85,11 +98,55 @@
     }
 
     #success img {
-      width: min(80vw, 320px);
+      width: min(75vw, 280px);
+      max-height: 40dvh;
       aspect-ratio: 1;
       object-fit: cover;
       border-radius: 25px;
       box-shadow: 0 12px 35px #d6598b55;
+    }
+
+    /* ===== ปรับสำหรับมือถือ ===== */
+    @media (max-width: 480px) {
+      .wrap {
+        padding: 12px;
+      }
+
+      .dog {
+        font-size: 55px;
+      }
+
+      .stage {
+        height: 165px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 13px 18px;
+      }
+    }
+
+    /* ===== ปรับสำหรับจอเตี้ย ===== */
+    @media (max-height: 600px) {
+      .dog {
+        font-size: 42px;
+      }
+
+      h1 {
+        margin: 6px 0;
+      }
+
+      p {
+        margin: 7px 0;
+      }
+
+      .stage {
+        height: 130px;
+      }
+
+      #success img {
+        max-height: 32dvh;
+      }
     }
   </style>
 </head>
@@ -98,10 +155,10 @@
 
   <main class="wrap">
 
-    <!-- ===== หน้าแรก: มาง้อ ===== -->
+    <!-- ===== หน้าแรก ===== -->
     <section id="question">
 
-      <div style="font-size: 65px;">🐶</div>
+      <div class="dog">🐶</div>
 
       <h1>มาง้ออะ💨</h1>
 
@@ -124,10 +181,10 @@
     </section>
 
 
-    <!-- ===== หน้าที่สอง: คืนดี ===== -->
+    <!-- ===== หน้าคืนดี ===== -->
     <section id="success">
 
-      <h1>เย้! คืนดีกันแลวว </h1>
+      <h1>เย้! คืนดีกันแลวว</h1>
 
       <p>ปุ้ดดดดดดด💨</p>
 
@@ -138,15 +195,12 @@
 
       <h2>🐶🐶🐶</h2>
 
-      <p></p>
-
     </section>
 
   </main>
 
 
   <script>
-    // ===== ตัวแปร =====
     let count = 0;
     let last = 0;
 
@@ -155,8 +209,6 @@
     const stage = document.querySelector("#stage");
     const msg = document.querySelector("#message");
 
-
-    // ===== ข้อความเมื่อพยายามกดปุ่มโกด =====
     const lines = [
       "งื้ออ อย่าโกดเลย 🥺",
       "จับไม่ได้หรอก แบร่ 😝",
@@ -165,15 +217,13 @@
       "กดฉันให้ได้สิ 💨"
     ];
 
-
-    // ===== ฟังก์ชันให้ปุ่มโกดหนี =====
+    // ===== ปุ่มโกดหนี =====
     function flee(e) {
 
       if (e?.cancelable) {
         e.preventDefault();
       }
 
-      // ป้องกันการทำงานถี่เกินไป
       if (Date.now() - last < 150) {
         return;
       }
@@ -181,8 +231,7 @@
       last = Date.now();
       count++;
 
-
-      // ปุ่มโกดเล็กลงเรื่อย ๆ
+      // ปุ่มโกดเล็กลง
       let scale = Math.max(0.2, 1 - count * 0.12);
 
       no.style.fontSize = (18 * scale) + "px";
@@ -191,8 +240,7 @@
         (15 * scale) + "px " +
         (23 * scale) + "px";
 
-
-      // สุ่มตำแหน่งใหม่ของปุ่มโกด
+      // สุ่มตำแหน่งภายในพื้นที่ปุ่ม
       const maxX = stage.clientWidth - no.offsetWidth;
       const maxY = stage.clientHeight - no.offsetHeight;
 
@@ -200,42 +248,33 @@
         Math.random() * Math.max(0, maxX) + "px";
 
       no.style.top =
-        (100 + Math.random() * Math.max(0, maxY - 100)) + "px";
+        (65 + Math.random() * Math.max(0, maxY - 65)) + "px";
 
       no.style.right = "auto";
 
-
-      // ปุ่มหายงอนใหญ่ขึ้นเรื่อย ๆ
+      // ปุ่มหายโกดใหญ่ขึ้น
       yes.style.transform =
         `scale(${Math.min(2.25, 1 + count * 0.16)})`;
 
-
-      // เปลี่ยนข้อความง้อ
+      // เปลี่ยนข้อความ
       msg.textContent = lines[(count - 1) % lines.length];
     }
 
-
-    // ===== เมื่อเมาส์เข้าใกล้ปุ่มโกด =====
+    // เมาส์เข้าใกล้ปุ่มโกด
     no.addEventListener("pointerenter", e => {
       if (e.pointerType === "mouse") {
         flee(e);
       }
     });
 
-
-    // ===== เมื่อแตะปุ่มโกดบนมือถือ =====
+    // แตะบนมือถือ
     no.addEventListener("pointerdown", flee);
-
     no.addEventListener("click", flee);
 
-
-    // ===== เมื่อกดปุ่มหายงอน =====
+    // กดหายโกด
     yes.addEventListener("click", () => {
-
       document.querySelector("#question").style.display = "none";
-
       document.querySelector("#success").style.display = "block";
-
     });
 
   </script>
