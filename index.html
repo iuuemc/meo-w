@@ -9,7 +9,6 @@
   <title>มาง้ออะ 💨</title>
 
   <style>
-    /* ===== ตั้งค่าหน้าเว็บ ===== */
     * {
       box-sizing: border-box;
     }
@@ -24,10 +23,10 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    /* ===== ขยับเนื้อหาทั้งหมดขึ้น 100px ===== */
+    /* ขยับเนื้อหาขึ้น */
     .wrap {
       width: min(95vw, 460px);
       padding: 16px;
@@ -49,7 +48,7 @@
       line-height: 1.2;
     }
 
-    /* ===== พื้นที่ปุ่ม ===== */
+    /* พื้นที่ปุ่ม */
     .stage {
       height: 175px;
       position: relative;
@@ -67,19 +66,19 @@
       white-space: nowrap;
     }
 
-    /* ===== ปุ่มหายโกด ===== */
+    /* ปุ่มหายโกด */
     #yes {
       position: absolute;
       top: 15px;
       left: 7%;
       background: #f74e8d;
       color: white;
-      transform-origin: top left;
-      transition: transform 0.2s;
+      transform-origin: center center;
+      transition: transform 0.25s ease;
       z-index: 2;
     }
 
-    /* ===== ปุ่มโกด ===== */
+    /* ปุ่มโกด */
     #no {
       position: absolute;
       top: 15px;
@@ -95,7 +94,7 @@
       font-size: 16px;
     }
 
-    /* ===== หน้าคืนดี ===== */
+    /* หน้าคืนดี */
     #success {
       display: none;
     }
@@ -109,7 +108,7 @@
       box-shadow: 0 12px 35px #d6598b55;
     }
 
-    /* ===== สำหรับมือถือ ===== */
+    /* มือถือ */
     @media (max-width: 480px) {
       .wrap {
         padding: 12px;
@@ -130,7 +129,7 @@
       }
     }
 
-    /* ===== สำหรับหน้าจอเตี้ย ===== */
+    /* หน้าจอเตี้ย */
     @media (max-height: 600px) {
       .wrap {
         transform: translateY(-20px);
@@ -163,7 +162,7 @@
 
   <main class="wrap">
 
-    <!-- ===== หน้าแรก ===== -->
+    <!-- หน้าแรก -->
     <section id="question">
 
       <div class="dog">🐶</div>
@@ -188,8 +187,7 @@
 
     </section>
 
-
-    <!-- ===== หน้าคืนดี ===== -->
+    <!-- หน้าคืนดี -->
     <section id="success">
 
       <h1>เย้! คืนดีกันแลวว</h1>
@@ -207,9 +205,7 @@
 
   </main>
 
-
   <script>
-    // ===== ตัวแปร =====
     let count = 0;
     let last = 0;
 
@@ -218,7 +214,6 @@
     const stage = document.querySelector("#stage");
     const msg = document.querySelector("#message");
 
-    // ===== ข้อความเมื่อพยายามกดโกด =====
     const lines = [
       "งื้ออ อย่าโกดเลย 🥺",
       "จับไม่ได้หรอก แบร่ 😝",
@@ -227,7 +222,7 @@
       "กดฉันให้ได้สิ 💨"
     ];
 
-    // ===== ฟังก์ชันปุ่มโกดหนี =====
+    // ปุ่มโกดหนี
     function flee(e) {
 
       if (e?.cancelable) {
@@ -241,7 +236,7 @@
       last = Date.now();
       count++;
 
-      // ปุ่มโกดเล็กลง
+      // ปุ่มโกดเล็กลงเรื่อย ๆ
       let scale = Math.max(0.2, 1 - count * 0.12);
 
       no.style.fontSize = (18 * scale) + "px";
@@ -262,33 +257,31 @@
 
       no.style.right = "auto";
 
-      // ปุ่มหายโกดใหญ่ขึ้น
-      yes.style.transform =
-        `scale(${Math.min(2.25, 1 + count * 0.16)})`;
+      // ปุ่มหายโกดใหญ่ขึ้นแบบไม่มีจำกัด
+      // ยิ่งกดโกด ยิ่งขยายจนเต็มจอ
+      const grow = Math.pow(1.25, count);
+
+      yes.style.transform = `scale(${grow})`;
 
       // เปลี่ยนข้อความ
       msg.textContent = lines[(count - 1) % lines.length];
     }
 
-    // ===== เมาส์เข้าใกล้ปุ่มโกด =====
+    // เมาส์เข้าใกล้ปุ่มโกด
     no.addEventListener("pointerenter", e => {
       if (e.pointerType === "mouse") {
         flee(e);
       }
     });
 
-    // ===== แตะปุ่มโกดบนมือถือ =====
+    // แตะปุ่มโกดบนมือถือ
     no.addEventListener("pointerdown", flee);
-
     no.addEventListener("click", flee);
 
-    // ===== กดหายโกดแล้วเปลี่ยนหน้า =====
+    // กดหายโกด
     yes.addEventListener("click", () => {
-
       document.querySelector("#question").style.display = "none";
-
       document.querySelector("#success").style.display = "block";
-
     });
 
   </script>
